@@ -1,4 +1,4 @@
-package com.elkusnandi.bakingapp.feature.main;
+package com.elkusnandi.bakingapp.feature.recipe_detail;
 
 import android.content.Context;
 import android.content.Intent;

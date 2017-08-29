@@ -1,4 +1,4 @@
-package com.elkusnandi.bakingapp.feature.main;
+package com.elkusnandi.bakingapp.feature.recipe_detail;
 
 import android.app.Activity;
 import android.support.design.widget.CollapsingToolbarLayout;
