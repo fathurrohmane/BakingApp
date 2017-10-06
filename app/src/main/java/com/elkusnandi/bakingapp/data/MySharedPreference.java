@@ -36,7 +36,7 @@ public class MySharedPreference {
                 ingredients +=
                         String.format(
                                 Locale.getDefault()
-                                , "%s %n %s \n"
+                                , "%s %1.0f %s \n"
                                 , ingredient.getIngredient()
                                 , ingredient.getQuantity()
                                 , ingredient.getMeasurement());
