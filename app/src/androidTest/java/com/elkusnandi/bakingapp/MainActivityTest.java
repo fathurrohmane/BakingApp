@@ -28,7 +28,7 @@ public class MainActivityTest {
     public void recyclerview_ClickTest() {
 
         // Click item at position 0
-        onView(withId(R.id.recyclerview_recipe)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.recyclerview_recipe)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click())); // TODO: 06/10/2017 INFO I know I can write more and better test but ill add more later if needed
     }
 
 

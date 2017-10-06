@@ -2,7 +2,7 @@ package com.elkusnandi.bakingapp.feature.main;
 
 import com.elkusnandi.bakingapp.common.IPresenter;
 import com.elkusnandi.bakingapp.common.IView;
-import com.elkusnandi.bakingapp.data.Recipe;
+import com.elkusnandi.bakingapp.data.model.Recipe;
 
 import java.util.List;
 
@@ -17,9 +17,7 @@ public interface MainContract {
     }
 
     interface Presenter extends IPresenter {
-
-        void loadData();
-
+        void onLoadRecipe();
     }
 
 }

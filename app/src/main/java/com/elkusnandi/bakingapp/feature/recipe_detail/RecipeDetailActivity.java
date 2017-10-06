@@ -14,7 +14,7 @@ import android.view.WindowManager;
 
 import com.elkusnandi.bakingapp.R;
 import com.elkusnandi.bakingapp.common.FragmentDataListener;
-import com.elkusnandi.bakingapp.data.Recipe;
+import com.elkusnandi.bakingapp.data.model.Recipe;
 
 import java.util.ArrayList;
 

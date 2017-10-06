@@ -3,6 +3,9 @@ package com.elkusnandi.bakingapp.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.elkusnandi.bakingapp.data.model.Ingredient;
+import com.elkusnandi.bakingapp.data.model.Recipe;
+
 import java.util.Locale;
 
 /**

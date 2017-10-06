@@ -1,4 +1,4 @@
-package com.elkusnandi.bakingapp.data;
+package com.elkusnandi.bakingapp.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -10,6 +10,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 
@@ -18,7 +19,7 @@ import com.elkusnandi.bakingapp.adapter.RecipeAdapter;
 import com.elkusnandi.bakingapp.common.BaseActivity;
 import com.elkusnandi.bakingapp.common.RecyclerViewListener;
 import com.elkusnandi.bakingapp.data.MySharedPreference;
-import com.elkusnandi.bakingapp.data.Recipe;
+import com.elkusnandi.bakingapp.data.model.Recipe;
 import com.elkusnandi.bakingapp.feature.recipe_detail.RecipeListActivity;
 import com.elkusnandi.bakingapp.ui.widget.RecipeWidget;
 import com.elkusnandi.bakingapp.util.Constant;
@@ -28,6 +29,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity implements MainContract.View, RecyclerViewListener {
 
@@ -36,6 +38,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Rec
 
     @BindView(R.id.viewanimator)
     ViewAnimator viewAnimator;
+
+    @BindView(R.id.button_reload)
+    Button buttonReload;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -71,7 +76,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Rec
         presenter = new MainPresenter(this);
 
         if (savedInstanceState == null) {
-            presenter.onLoad();
+            presenter.onLoadRecipe();
 
         } else {
             recipeAdapter.setData(savedInstanceState.<Recipe>getParcelableArrayList("recipe"));
@@ -140,7 +145,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Rec
     }
 
     @Override
-    public void showNoData() {
+    public void showError() {
         viewAnimator.setDisplayedChild(Constant.ERROR);
     }
 
@@ -172,6 +177,15 @@ public class MainActivity extends BaseActivity implements MainContract.View, Rec
     @Override
     public void showToast(int type, String info) {
         Toast.makeText(this, info, Toast.LENGTH_LONG).show();
+    }
+
+    @OnClick({R.id.button_reload})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.button_reload:
+                presenter.onLoadRecipe();
+                break;
+        }
     }
 
 }

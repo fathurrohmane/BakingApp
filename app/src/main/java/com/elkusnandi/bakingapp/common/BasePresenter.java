@@ -11,5 +11,4 @@ public abstract class BasePresenter implements IPresenter {
     protected CompositeDisposable disposable
             = new CompositeDisposable();
 
-
 }

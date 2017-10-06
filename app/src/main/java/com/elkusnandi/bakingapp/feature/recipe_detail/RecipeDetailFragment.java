@@ -14,7 +14,7 @@ import android.widget.ViewAnimator;
 
 import com.elkusnandi.bakingapp.R;
 import com.elkusnandi.bakingapp.common.FragmentDataListener;
-import com.elkusnandi.bakingapp.data.CookingStep;
+import com.elkusnandi.bakingapp.data.model.CookingStep;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;

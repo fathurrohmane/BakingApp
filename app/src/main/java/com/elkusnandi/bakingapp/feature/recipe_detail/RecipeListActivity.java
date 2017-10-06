@@ -14,9 +14,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.elkusnandi.bakingapp.R;
-import com.elkusnandi.bakingapp.data.CookingStep;
-import com.elkusnandi.bakingapp.data.Ingredient;
-import com.elkusnandi.bakingapp.data.Recipe;
+import com.elkusnandi.bakingapp.data.model.CookingStep;
+import com.elkusnandi.bakingapp.data.model.Ingredient;
+import com.elkusnandi.bakingapp.data.model.Recipe;
 
 import java.util.ArrayList;
 

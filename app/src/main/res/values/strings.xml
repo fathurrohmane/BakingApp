@@ -11,6 +11,8 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="info_widget_updated">Widget %s added.</string>
+    <string name="info_error">Error</string>
+    <string name="button_reload">Reload</string>
 
     <!--Detail Recipe Fragment-->
     <string name="text_no_video">No Video Available</string>

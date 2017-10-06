@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.elkusnandi.bakingapp.R;
 import com.elkusnandi.bakingapp.common.RecyclerViewListener;
-import com.elkusnandi.bakingapp.data.Recipe;
+import com.elkusnandi.bakingapp.data.model.Recipe;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -8,8 +8,6 @@ public interface IPresenter {
 
     void onAttached();
 
-    void onLoad();
-
     void onDetached();
 
 }

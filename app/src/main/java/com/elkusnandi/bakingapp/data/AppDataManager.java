@@ -1,5 +1,9 @@
 package com.elkusnandi.bakingapp.data;
 
+import com.elkusnandi.bakingapp.data.model.CookingStep;
+import com.elkusnandi.bakingapp.data.model.Ingredient;
+import com.elkusnandi.bakingapp.data.model.Recipe;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -111,7 +115,7 @@ public class AppDataManager {
                     }
                     e.onSuccess(recipeList);
                 } else {
-                    e.onError(new Exception("Request recipice data error"));
+                    e.onError(new Exception("Request recipe data error"));
                 }
             }
         })

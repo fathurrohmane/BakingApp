@@ -10,7 +10,7 @@ public interface IView {
 
     void hideProgress();
 
-    void showNoData();
+    void showError();
 
     void showNoResult();
 

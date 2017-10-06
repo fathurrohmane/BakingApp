@@ -15,7 +15,7 @@ import com.elkusnandi.bakingapp.R;
 import com.elkusnandi.bakingapp.adapter.IngredientAdapter;
 import com.elkusnandi.bakingapp.common.FragmentDataListener;
 import com.elkusnandi.bakingapp.common.RecyclerViewListener;
-import com.elkusnandi.bakingapp.data.Ingredient;
+import com.elkusnandi.bakingapp.data.model.Ingredient;
 
 import java.util.ArrayList;
 

@@ -1,9 +1,8 @@
 package com.elkusnandi.bakingapp.feature.main;
 
 import com.elkusnandi.bakingapp.common.BasePresenter;
-import com.elkusnandi.bakingapp.common.IPresenter;
 import com.elkusnandi.bakingapp.data.AppDataManager;
-import com.elkusnandi.bakingapp.data.Recipe;
+import com.elkusnandi.bakingapp.data.model.Recipe;
 
 import java.util.List;
 
@@ -15,7 +14,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Taruna 98 on 29/08/2017.
  */
 
-public class MainPresenter extends BasePresenter implements IPresenter {
+public class MainPresenter extends BasePresenter implements MainContract.Presenter {
 
     private MainContract.View mainView;
 
@@ -32,7 +31,7 @@ public class MainPresenter extends BasePresenter implements IPresenter {
     }
 
     @Override
-    public void onLoad() {
+    public void onLoadRecipe() {
         mainView.showProgress();
         disposable.add(
                 repository.getRecipes()
@@ -48,6 +47,7 @@ public class MainPresenter extends BasePresenter implements IPresenter {
                             @Override
                             public void onError(Throwable e) {
                                 mainView.hideProgress();
+                                mainView.showError();
                                 mainView.showToast(0, e.getMessage());
                             }
                         })
@@ -58,4 +58,5 @@ public class MainPresenter extends BasePresenter implements IPresenter {
     public void onDetached() {
         disposable.clear();
     }
+
 }
