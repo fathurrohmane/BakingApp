@@ -2,4 +2,28 @@
     <string name="app_name">BakingApp</string>
     <string name="title_recipe_detail">Recipe Detail</string>
     <string name="title_activity_main">MainActivity</string>
+
+    <!--Main Activity-->
+    <string name="pick_widget_title">Pick a Recipe for Widget</string>
+    <string name="item_recipe_id">%d</string>
+    <string name="item_recipe_title">%s</string>
+    <string name="item_recipe_serving">For %,d person</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="info_widget_updated">Widget %s added.</string>
+
+    <!--Detail Recipe Fragment-->
+    <string name="text_no_video">No Video Available</string>
+    <string name="button_next">Next</string>
+    <string name="button_prev">Previous</string>
+
+    <!--Reipe List-->
+    <string name="recipe_list_ingredient">Ingredients</string>
+
+    <!--Widget-->
+    <string name="add_recipe">Add Recipe</string>
+    <string name="no_ingredient">No ingredient</string>
+
+    <!--Error-->
+    <string name="no_recipe">Recipe Missing error!</string>
 </resources>

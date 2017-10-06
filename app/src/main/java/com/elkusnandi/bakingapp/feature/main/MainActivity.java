@@ -1,51 +1,177 @@
 package com.elkusnandi.bakingapp.feature.main;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
+import android.widget.ViewAnimator;
 
 import com.elkusnandi.bakingapp.R;
+import com.elkusnandi.bakingapp.adapter.RecipeAdapter;
 import com.elkusnandi.bakingapp.common.BaseActivity;
+import com.elkusnandi.bakingapp.common.RecyclerViewListener;
+import com.elkusnandi.bakingapp.data.MySharedPreference;
+import com.elkusnandi.bakingapp.data.Recipe;
+import com.elkusnandi.bakingapp.feature.recipe_detail.RecipeListActivity;
+import com.elkusnandi.bakingapp.ui.widget.RecipeWidget;
+import com.elkusnandi.bakingapp.util.Constant;
 
-public class MainActivity extends BaseActivity implements MainView {
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class MainActivity extends BaseActivity implements MainContract.View, RecyclerViewListener {
+
+    @BindView(R.id.recyclerview_recipe)
+    RecyclerView recyclerViewRecipe;
+
+    @BindView(R.id.viewanimator)
+    ViewAnimator viewAnimator;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    private MainPresenter presenter;
+    private RecipeAdapter recipeAdapter;
+    private boolean isPickingWidgetMode = false;
+    private GridLayoutManager gridLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
+
+        toolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        int column = 1;
+        if (getResources().getBoolean(R.bool.is_tablet)) {
+            column = 2;
+        }
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            column *= 2;
+        }
+
+        gridLayoutManager = new GridLayoutManager(this, column);
+        recyclerViewRecipe.setLayoutManager(gridLayoutManager);
+
+        recipeAdapter = new RecipeAdapter(this, this);
+        recyclerViewRecipe.setAdapter(recipeAdapter);
+
+        presenter = new MainPresenter(this);
+
+        if (savedInstanceState == null) {
+            presenter.onLoad();
+
+        } else {
+            recipeAdapter.setData(savedInstanceState.<Recipe>getParcelableArrayList("recipe"));
+            if (gridLayoutManager != null) {
+                gridLayoutManager.scrollToPosition(savedInstanceState.getInt("scrollPosition"));
             }
-        });
+
+        }
+
+        if (getIntent().hasExtra("pick_widget")) {
+            isPickingWidgetMode = true;
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(getString(R.string.pick_widget_title));
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (recipeAdapter != null) {
+            outState.putParcelableArrayList("recipe", recipeAdapter.getRecipes());
+        }
+
+        if (gridLayoutManager != null) {
+            outState.putInt("scrollPosition", gridLayoutManager.findFirstVisibleItemPosition());
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.onDetached();
+    }
+
+    @Override
+    public void onRecyclerViewItemClicked(View view, Bundle bundle) {
+        Recipe recipe = bundle.getParcelable("recipe");
+        Intent intent;
+
+        if (isPickingWidgetMode) {
+            int[] ids = AppWidgetManager.getInstance(
+                    getApplication()).getAppWidgetIds(
+                    new ComponentName(getApplication()
+                            , RecipeWidget.class)
+            );
+            if (recipe != null) {
+                MySharedPreference.setWidgetRecipe(this, recipe);
+                intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+                intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+                getApplicationContext().sendBroadcast(intent);
+                showToast(0, getString(R.string.info_widget_updated, recipe.getTitle()));
+            } else {
+                showToast(0, getString(R.string.no_recipe));
+            }
+
+            onBackPressed();
+        } else {
+            intent = new Intent(this, RecipeListActivity.class);
+            intent.putExtra("recipe", recipe);
+            startActivity(intent);
+        }
+
+    }
+
+    @Override
+    public void showNoData() {
+        viewAnimator.setDisplayedChild(Constant.ERROR);
+    }
+
+    @Override
+    public void showNoResult() {
+        viewAnimator.setDisplayedChild(Constant.ERROR);
     }
 
     @Override
     public void showProgress() {
-
+        viewAnimator.setDisplayedChild(Constant.LOADING);
     }
 
     @Override
     public void hideProgress() {
-
+        viewAnimator.setDisplayedChild(Constant.CONTENT);
     }
 
     @Override
-    public void onNoConnection() {
-
+    public void showRecipie(List<Recipe> recipeList) {
+        recipeAdapter.setData((ArrayList<Recipe>) recipeList);
     }
 
     @Override
-    public void onNoData() {
-
+    public void showSnackBar(int type, String info) {
+        Snackbar.make(recyclerViewRecipe, info, Snackbar.LENGTH_LONG).show();
     }
+
+    @Override
+    public void showToast(int type, String info) {
+        Toast.makeText(this, info, Toast.LENGTH_LONG).show();
+    }
+
 }

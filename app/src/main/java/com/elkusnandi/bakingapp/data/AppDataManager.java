@@ -1,14 +1,14 @@
 package com.elkusnandi.bakingapp.data;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.HttpUrl;
+import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -19,41 +19,102 @@ import okhttp3.Response;
 
 public class AppDataManager {
 
-    OkHttpClient mHttpClient;
+    private static AppDataManager INSTANCE;
 
-    public AppDataManager() {
+    private OkHttpClient mHttpClient;
+
+    private AppDataManager() {
         mHttpClient = new OkHttpClient();
     }
 
-    public Observable<Response> getRecipes() {
+    public static AppDataManager getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new AppDataManager();
+        }
+        return INSTANCE;
+    }
+//    public Observable<Response> getRecipes() {
+//        return Observable.create(
+//                new ObservableOnSubscribe<Response>() {
+//                    @Override
+//                    public void subscribe(ObservableEmitter<Response> e) throws Exception {
+////                        HttpUrl.Builder urlBuilder = HttpUrl.parse(api).newBuilder();
+////                        String url = urlBuilder.build().toString();
+//
+//                        Request request = new Request.Builder()
+//                                .url("https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json")
+//                                .build();
+//                        Response response = mHttpClient.newCall(request).execute();
+//
+//                        if (response.isSuccessful()) {
+//                            if (!e.isDisposed()) {
+//                                e.onNext(response);
+//                                e.onComplete();
+//                            }
+//                        } else {
+//                            if (!e.isDisposed()) {
+//                                e.onError(new Exception("Request recipice data error"));
+//                            }
+//                        }
+//                    }
+//                }
+//        )
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                ;
+//    }
 
-        return Observable.create(
-                new ObservableOnSubscribe<Response>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<Response> e) throws Exception {
-//                        HttpUrl.Builder urlBuilder = HttpUrl.parse(api).newBuilder();
-//                        String url = urlBuilder.build().toString();
+    public Single<List<Recipe>> getRecipes() {
+        return Single.create(new SingleOnSubscribe<List<Recipe>>() {
+            @Override
+            public void subscribe(SingleEmitter<List<Recipe>> e) throws Exception {
+                Request request = new Request.Builder()
+                        .url("https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json")
+                        .build();
+                Response response = mHttpClient.newCall(request).execute();
+                List<Recipe> recipeList = new ArrayList<>();
+                if (response.isSuccessful()) {
+                    JSONArray mainResult = new JSONArray(response.body().string());
+                    JSONObject jsonObject;
+                    for (int i = 0; i < mainResult.length(); i++) {
+                        JSONObject jsonRecipie = mainResult.getJSONObject(i);
 
-                        Request request = new Request.Builder()
-                                .url("https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json")
-                                .build();
-                        Response response = mHttpClient.newCall(request).execute();
-
-                        if (response.isSuccessful()) {
-                            if (!e.isDisposed()) {
-                                e.onNext(response);
-                                e.onComplete();
-                            }
-                        } else {
-                            if (!e.isDisposed()) {
-                                e.onError(new Exception("Request recipice data error"));
-                            }
+                        Recipe recipe = new Recipe(
+                                jsonRecipie.getLong("id"),
+                                jsonRecipie.getString("name"),
+                                jsonRecipie.getInt("servings"),
+                                jsonRecipie.getString("image")
+                        );
+                        JSONArray jsonIngredients = jsonRecipie.getJSONArray("ingredients");
+                        for (int j = 0; j < jsonIngredients.length(); j++) {
+                            jsonObject = jsonIngredients.getJSONObject(j);
+                            Ingredient ingredient = new Ingredient(
+                                    jsonObject.getString("ingredient"),
+                                    jsonObject.getDouble("quantity"),
+                                    jsonObject.getString("measure")
+                            );
+                            recipe.addIngeredients(ingredient);
                         }
+                        JSONArray jsonSteps = jsonRecipie.getJSONArray("steps");
+                        for (int j = 0; j < jsonSteps.length(); j++) {
+                            jsonObject = jsonSteps.getJSONObject(j);
+                            CookingStep cookingStep = new CookingStep(
+                                    jsonObject.getInt("id"),
+                                    jsonObject.getString("shortDescription"),
+                                    jsonObject.getString("description"),
+                                    jsonObject.getString("videoURL"),
+                                    jsonObject.getString("thumbnailURL")
+                            );
+                            recipe.addSteps(cookingStep);
+                        }
+                        recipeList.add(recipe);
                     }
+                    e.onSuccess(recipeList);
+                } else {
+                    e.onError(new Exception("Request recipice data error"));
                 }
-        )
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+            }
+        })
                 ;
     }
 }

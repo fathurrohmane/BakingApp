@@ -1,5 +1,9 @@
 package com.elkusnandi.bakingapp.feature.main;
 
+import com.elkusnandi.bakingapp.common.IPresenter;
+import com.elkusnandi.bakingapp.common.IView;
+import com.elkusnandi.bakingapp.data.Recipe;
+
 import java.util.List;
 
 /**
@@ -8,19 +12,12 @@ import java.util.List;
 
 public interface MainContract {
 
-    interface View {
-        void showLoading();
-
-        void hideLoading();
-
-        void loadData(List<?> data);
-
-        void showError();
-
-        void showNoData();
+    interface View extends IView {
+        void showRecipie(List<Recipe> recipeList);
     }
 
-    interface Presenter {
+    interface Presenter extends IPresenter {
+
         void loadData();
 
     }

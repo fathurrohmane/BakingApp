@@ -10,8 +10,12 @@ public interface IView {
 
     void hideProgress();
 
-    void onNoConnection();
+    void showNoData();
 
-    void onNoData();
+    void showNoResult();
+
+    void showSnackBar(int type, String info);
+
+    void showToast(int type, String info);
 
 }

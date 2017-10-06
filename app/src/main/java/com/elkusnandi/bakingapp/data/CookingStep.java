@@ -1,11 +1,25 @@
 package com.elkusnandi.bakingapp.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Taruna 98 on 29/08/2017.
  */
 
-public class CookingStep {
+public class CookingStep implements Parcelable {
 
+    public static final Creator<CookingStep> CREATOR = new Creator<CookingStep>() {
+        @Override
+        public CookingStep createFromParcel(Parcel in) {
+            return new CookingStep(in);
+        }
+
+        @Override
+        public CookingStep[] newArray(int size) {
+            return new CookingStep[size];
+        }
+    };
     private int id;
     private String shortDescription;
     private String description;
@@ -18,6 +32,14 @@ public class CookingStep {
         this.description = description;
         this.videoUrl = videoUrl;
         this.tumbnailUrl = tumbnailUrl;
+    }
+
+    protected CookingStep(Parcel in) {
+        id = in.readInt();
+        shortDescription = in.readString();
+        description = in.readString();
+        videoUrl = in.readString();
+        tumbnailUrl = in.readString();
     }
 
     public int getId() {
@@ -38,5 +60,19 @@ public class CookingStep {
 
     public String getTumbnailUrl() {
         return tumbnailUrl;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(shortDescription);
+        dest.writeString(description);
+        dest.writeString(videoUrl);
+        dest.writeString(tumbnailUrl);
     }
 }

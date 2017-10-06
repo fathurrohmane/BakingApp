@@ -6,9 +6,9 @@ import io.reactivex.disposables.CompositeDisposable;
  * Created by Taruna 98 on 29/08/2017.
  */
 
-public abstract class BasePresenter  {
+public abstract class BasePresenter implements IPresenter {
 
-    protected CompositeDisposable mSubscription
+    protected CompositeDisposable disposable
             = new CompositeDisposable();
 
 
