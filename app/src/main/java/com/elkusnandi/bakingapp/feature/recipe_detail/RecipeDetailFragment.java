@@ -1,6 +1,7 @@
 package com.elkusnandi.bakingapp.feature.recipe_detail;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +13,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.elkusnandi.bakingapp.R;
 import com.elkusnandi.bakingapp.common.FragmentDataListener;
 import com.elkusnandi.bakingapp.data.model.CookingStep;
@@ -62,6 +66,9 @@ public class RecipeDetailFragment extends Fragment {
 
     private SimpleExoPlayer exoPlayer;
     private MediaSource videoSource;
+    private long playerPosition;
+    private TrackSelector trackSelector;
+    private boolean playerIsPlaying;
 
     private FragmentDataListener listener;
     private CookingStep cookingStep;
@@ -132,6 +139,52 @@ public class RecipeDetailFragment extends Fragment {
         if (cookingStep.getVideoUrl().isEmpty()) {
             viewAnimator.setDisplayedChild(1);
         }
+
+        if (savedInstanceState != null) {
+            exoPlayer.seekTo(savedInstanceState.getLong("playerPosition"));
+            exoPlayer.setPlayWhenReady(savedInstanceState.getBoolean("isPlaying"));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putLong("playerPosition", playerPosition);
+        outState.putBoolean("isPlaying", playerIsPlaying);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+// TODO: 07/10/2017 INFO seems the same with onResume?? Not sure Fragment lifecycle is confusing
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (exoPlayer != null) {
+            if (playerPosition > 0) {
+                exoPlayer.seekTo(playerPosition);
+            }
+            exoPlayer.setPlayWhenReady(playerIsPlaying);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        playerPosition = exoPlayer.getCurrentPosition();
+        playerIsPlaying = exoPlayer.getPlayWhenReady();
+        exoPlayer.stop();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        destroyExoplayer();
     }
 
     @Override
@@ -158,7 +211,7 @@ public class RecipeDetailFragment extends Fragment {
     }
 
     private void initializeExoplayer(Uri uri) {
-        TrackSelector trackSelector = new DefaultTrackSelector();
+        trackSelector = new DefaultTrackSelector();
         exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
         simpleExoPlayerView.setPlayer(exoPlayer);
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(),
@@ -171,6 +224,15 @@ public class RecipeDetailFragment extends Fragment {
 // Prepare the player with the source.
         exoPlayer.prepare(videoSource);
 
+        Glide.with(getContext())
+                .load(cookingStep.getTumbnailUrl())
+                .asBitmap()
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        simpleExoPlayerView.setDefaultArtwork(resource);
+                    }
+                });
     }
 
     private void destroyExoplayer() {

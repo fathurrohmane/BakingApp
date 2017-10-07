@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -99,7 +100,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements FragmentD
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            finish();// TODO: 04/10/2017 QUESTION is this correct? Because there a class like NavUtil but cant make it work
+            //finish();
+            NavUtils.navigateUpFromSameTask(this);
             return true;
         }
         return super.onOptionsItemSelected(item);

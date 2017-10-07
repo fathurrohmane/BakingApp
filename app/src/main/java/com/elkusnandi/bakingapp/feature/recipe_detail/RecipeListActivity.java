@@ -48,7 +48,7 @@ public class RecipeListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);// TODO: 03/10/2017 QUESTION The Activity animation is different from click back and click up. It seems that it did two different things?
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
         View recyclerView = findViewById(R.id.recipe_list);

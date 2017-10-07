@@ -34,7 +34,6 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
 
     public void setData(List<Ingredient> ingredients) {
         mValues.addAll(ingredients);//
-        //mValues = ingredients; // TODO: 29/09/2017 which is better? or best practice. I don't understand the data flow(?) since it is automated deteled by GC if its unused
     }
 
     @Override

@@ -37,36 +37,6 @@ public class AppDataManager {
         }
         return INSTANCE;
     }
-//    public Observable<Response> getRecipes() {
-//        return Observable.create(
-//                new ObservableOnSubscribe<Response>() {
-//                    @Override
-//                    public void subscribe(ObservableEmitter<Response> e) throws Exception {
-////                        HttpUrl.Builder urlBuilder = HttpUrl.parse(api).newBuilder();
-////                        String url = urlBuilder.build().toString();
-//
-//                        Request request = new Request.Builder()
-//                                .url("https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json")
-//                                .build();
-//                        Response response = mHttpClient.newCall(request).execute();
-//
-//                        if (response.isSuccessful()) {
-//                            if (!e.isDisposed()) {
-//                                e.onNext(response);
-//                                e.onComplete();
-//                            }
-//                        } else {
-//                            if (!e.isDisposed()) {
-//                                e.onError(new Exception("Request recipice data error"));
-//                            }
-//                        }
-//                    }
-//                }
-//        )
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                ;
-//    }
 
     public Single<List<Recipe>> getRecipes() {
         return Single.create(new SingleOnSubscribe<List<Recipe>>() {
