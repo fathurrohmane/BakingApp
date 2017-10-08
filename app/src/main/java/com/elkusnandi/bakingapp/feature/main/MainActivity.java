@@ -5,7 +5,10 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.Snackbar;
+import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -45,6 +48,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Rec
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
+    @Nullable
+    private CountingIdlingResource countingIdlingResource = new CountingIdlingResource("recipe_network_call");
+
     private MainPresenter presenter;
     private RecipeAdapter recipeAdapter;
     private boolean isPickingWidgetMode = false;
@@ -73,7 +79,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Rec
         recipeAdapter = new RecipeAdapter(this, this);
         recyclerViewRecipe.setAdapter(recipeAdapter);
 
-        presenter = new MainPresenter(this);
+        countingIdlingResource = new CountingIdlingResource("recipe_network_call");
+
+        presenter = new MainPresenter(this, countingIdlingResource);
 
         if (savedInstanceState == null) {
             presenter.onLoadRecipe();
@@ -186,6 +194,11 @@ public class MainActivity extends BaseActivity implements MainContract.View, Rec
                 presenter.onLoadRecipe();
                 break;
         }
+    }
+
+    @VisibleForTesting
+    public CountingIdlingResource getCountingIdlingResource() {
+        return countingIdlingResource;
     }
 
 }

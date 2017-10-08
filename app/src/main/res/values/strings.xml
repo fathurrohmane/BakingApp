@@ -21,6 +21,7 @@
 
     <!--Reipe List-->
     <string name="recipe_list_ingredient">Ingredients</string>
+    <string name="recipe_list_item_content">Recipe Ingredients</string>
 
     <!--Widget-->
     <string name="add_recipe">Add Recipe</string>

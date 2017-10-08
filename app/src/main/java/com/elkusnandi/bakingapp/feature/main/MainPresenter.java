@@ -1,5 +1,8 @@
 package com.elkusnandi.bakingapp.feature.main;
 
+import android.support.annotation.Nullable;
+import android.support.test.espresso.idling.CountingIdlingResource;
+
 import com.elkusnandi.bakingapp.common.BasePresenter;
 import com.elkusnandi.bakingapp.data.AppDataManager;
 import com.elkusnandi.bakingapp.data.model.Recipe;
@@ -17,12 +20,14 @@ import io.reactivex.schedulers.Schedulers;
 public class MainPresenter extends BasePresenter implements MainContract.Presenter {
 
     private MainContract.View mainView;
-
     private AppDataManager repository;
+    private CountingIdlingResource countingIdlingResource;
 
-    public MainPresenter(MainContract.View mainView) {
+
+    public MainPresenter(MainContract.View mainView, @Nullable CountingIdlingResource countingIdlingResource) {
         this.mainView = mainView;
         repository = AppDataManager.getInstance();
+        this.countingIdlingResource = countingIdlingResource;
     }
 
     @Override
@@ -33,6 +38,9 @@ public class MainPresenter extends BasePresenter implements MainContract.Present
     @Override
     public void onLoadRecipe() {
         mainView.showProgress();
+        if (countingIdlingResource != null) {
+            countingIdlingResource.increment();
+        }
         disposable.add(
                 repository.getRecipes()
                         .subscribeOn(Schedulers.io())
@@ -42,6 +50,9 @@ public class MainPresenter extends BasePresenter implements MainContract.Present
                             public void onSuccess(List<Recipe> value) {
                                 mainView.showRecipie(value);
                                 mainView.hideProgress();
+                                if (countingIdlingResource != null) {
+                                    countingIdlingResource.decrement();
+                                }
                             }
 
                             @Override
@@ -49,6 +60,9 @@ public class MainPresenter extends BasePresenter implements MainContract.Present
                                 mainView.hideProgress();
                                 mainView.showError();
                                 mainView.showToast(0, e.getMessage());
+                                if (countingIdlingResource != null) {
+                                    countingIdlingResource.decrement();
+                                }
                             }
                         })
         );

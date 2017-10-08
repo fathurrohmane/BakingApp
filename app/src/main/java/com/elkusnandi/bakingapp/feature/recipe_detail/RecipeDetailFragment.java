@@ -2,6 +2,7 @@ package com.elkusnandi.bakingapp.feature.recipe_detail;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -224,13 +225,20 @@ public class RecipeDetailFragment extends Fragment {
 // Prepare the player with the source.
         exoPlayer.prepare(videoSource);
 
+        final Bitmap defaultThumbnail = BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.ic_video_no_thumbnail);
+
         Glide.with(getContext())
                 .load(cookingStep.getTumbnailUrl())
                 .asBitmap()
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        simpleExoPlayerView.setDefaultArtwork(resource);
+                        if (resource == null) {
+                            simpleExoPlayerView.setDefaultArtwork(defaultThumbnail);
+                        } else {
+                            simpleExoPlayerView.setDefaultArtwork(resource);
+                        }
                     }
                 });
     }

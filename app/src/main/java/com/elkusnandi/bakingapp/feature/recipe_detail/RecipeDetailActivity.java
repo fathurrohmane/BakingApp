@@ -4,7 +4,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -100,8 +99,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements FragmentD
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            //finish();
-            NavUtils.navigateUpFromSameTask(this);
+            finish();
+            //NavUtils.navigateUpFromSameTask(this);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -155,11 +154,11 @@ public class RecipeDetailActivity extends AppCompatActivity implements FragmentD
                         .addToBackStack(null)
                         .commit();
                 if (getSupportActionBar() != null) {
-                    if (nextPosition == 0) {
-                        getSupportActionBar().setTitle(getString(R.string.recipe_list_ingredient));
-                    } else {
+                    //if (nextPosition == 0) {
+                    //    getSupportActionBar().setTitle(getString(R.string.recipe_list_ingredient));
+                    //} else {
                         getSupportActionBar().setTitle(recipe.getSteps().get(nextPosition).getShortDescription());
-                    }
+                    //}
                 }
                 break;
         }
