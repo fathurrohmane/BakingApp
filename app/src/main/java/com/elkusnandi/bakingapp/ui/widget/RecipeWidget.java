@@ -39,7 +39,7 @@ public class RecipeWidget extends AppWidgetProvider {
             String ingredients = MySharedPreference.getWidgetRecipeIngredients(context);
             views.setTextViewText(R.id.appwidget_ingredient, ingredients);
             intent = new Intent(context, MainActivity.class);
-            intent.putExtra("pick_widget", false);// TODO: 06/10/2017 INFO Sorry I have to use MySharedPref because to lazy to set up DB. So I cant imidiately open Detail Recipe
+            intent.putExtra("pick_widget", false);
             pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
             views.setOnClickPendingIntent(R.id.appwidget_title, pendingIntent);
 

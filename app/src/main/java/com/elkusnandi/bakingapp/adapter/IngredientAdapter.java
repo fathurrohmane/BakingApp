@@ -33,7 +33,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
     }
 
     public void setData(List<Ingredient> ingredients) {
-        mValues.addAll(ingredients);//
+        mValues.addAll(ingredients);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.elkusnandi.bakingapp;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
@@ -29,10 +28,10 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 
 /**
- * Created by Taruna 98 on 08/10/2017.
+ * Created by Taruna 98 on 09/10/2017.
  */
 
-public class RecipeListTest {
+public class RecipeListTabletTest {
 
     @Rule
     public ActivityTestRule<RecipeListActivity> recipeListActivityTestRule = new ActivityTestRule<>(RecipeListActivity.class, false, false);
@@ -82,51 +81,40 @@ public class RecipeListTest {
     }
 
     @Test
-    public void toolbarIsDisplayedOnIngredientsFragmentMobilePotraitTest() {
+    public void nextButtonHiddenOnStepsFragmentTabletTest() {
         recipeListActivityTestRule.launchActivity(getIntent());
-        recipeListActivityTestRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        onView(withId(R.id.recipe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-
-        onView(withId(R.id.app_bar)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void toolbarIsDisplayedOnIngredientsFragmentMobileLandscapeTest() {
-        recipeListActivityTestRule.launchActivity(getIntent());
-        recipeListActivityTestRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
-        onView(withId(R.id.recipe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-
-        onView(withId(R.id.app_bar)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void toolbarIsDisplayedOnStepsFragmentMobilePotraitTest() {
-        recipeListActivityTestRule.launchActivity(getIntent());
-        recipeListActivityTestRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         onView(withId(R.id.recipe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
 
-        onView(withId(R.id.app_bar)).check(matches(isDisplayed()));
+        onView(withId(R.id.button_next)).check(matches(not(isDisplayed())));
     }
 
     @Test
-    public void toolbarIsHiddenOnStepsFragmentMobileLandscapeTest() {
+    public void prevButtonHiddenOnStepsFragmentTabletTest() {
         recipeListActivityTestRule.launchActivity(getIntent());
-        recipeListActivityTestRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        //recipeListActivityTestRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         onView(withId(R.id.recipe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
 
-        onView(withId(R.id.app_bar)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.button_prev)).check(matches(not(isDisplayed())));
     }
 
     @Test
-    public void toolbarTitleIsChangingWhenItemTest() {
+    public void toolbarTitleIsNotChangingWhenIngredientsClickedTest() {
         recipeListActivityTestRule.launchActivity(getIntent());
 
         onView(withId(R.id.recipe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
-        matchToolbarTitle("step_1");
+        matchToolbarTitle("Nutella");
     }
+
+    @Test
+    public void toolbarTitleIsNotChangingWhenStepsTest() {
+        recipeListActivityTestRule.launchActivity(getIntent());
+
+        onView(withId(R.id.recipe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
+
+        matchToolbarTitle("Nutella");
+    }
+
 }

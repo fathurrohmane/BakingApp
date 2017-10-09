@@ -156,12 +156,6 @@ public class RecipeDetailFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-// TODO: 07/10/2017 INFO seems the same with onResume?? Not sure Fragment lifecycle is confusing
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
 
